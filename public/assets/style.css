@@ -1,0 +1,85 @@
+[x-cloak] {
+  display: none !important;
+}
+:root {
+  --color-primario: #fff;
+  --gray-700: #1e1e1e;
+}
+body {
+  background-color: var(--gray-700);
+  color: var(--color-primario);
+  font-family: "Courier New", monospace;
+}
+
+.terminal {
+  background-color: #000;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  height: 550px;
+  overflow-y: scroll;
+}
+
+.terminal pre {
+  color: var(--color-primario);
+}
+
+.input-area {
+  background-color: var(--gray-700);
+  border: none;
+  color: var(--color-primario);
+  font-size: 16px;
+  outline: none;
+}
+
+.input-area:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primario);
+}
+
+.suggestions {
+  color: var(--color-primario);
+  font-size: 16px;
+  margin-top: 5px;
+  position: absolute;
+}
+
+.loginContainer {
+  border: 2px solid var(--color-primario);
+  padding: 5%;
+  margin-top: 10%;
+  border-radius: 2%;
+}
+.prompt {
+  white-space: pre;
+  color: var(--color-primario);
+}
+
+.input-area {
+  position: relative;
+  background: transparent;
+  z-index: 2;
+  width: 100%;
+  padding: 8px;
+  font-family: inherit;
+}
+.ghost-text {
+  position: relative;
+  width: 100%;
+  padding: 8px;
+  pointer-events: none;
+  font-family: inherit;
+  font-size: inherit;
+  z-index: 1;
+}
+
+.autocomplete-wrapper {
+  font-family: monospace;
+  font-size: 1rem;
+  position: relative;
+}
+
+.terminal-output {
+  white-space: pre-wrap; /* para que respete los saltos de línea \n */
+  font-family: monospace;
+}

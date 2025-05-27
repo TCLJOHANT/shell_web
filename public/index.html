@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Web</title>
+    <script defer src=""></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<main class="d-flex justify-content-center align-items-center">
+    
+    <div class="container mt-5" 
+        x-data="TerminalComponent"
+        :class="{'d-none': !$store.auth.estaAutorizado}"
+        x-cloak
+        >
+        <div class="d-flex justify-content-between align-items-center">
+                <h1>Terminal</h1>
+                <div class="">
+                    <i class="fa fa-gear mx-4 fa-spin" 
+                        x-data="ConfiguracionComponent"
+                        title="configuracion" 
+                        @click.prevent="configuracion"
+                        style="cursor: pointer;" 
+                    ></i>
+                    <button class="btn btn-sm btn-danger" @click.prevent="cerrarSesion">Cerrar sesión</button>
+                </div>
+        </div>
+
+
+        <div class="terminal" x-ref="terminalDom">
+             <!-- <pre x-text="terminalOutput"></pre> -->
+            <div x-ref="terminalRender" x-html="terminalHtmlOutput" class="terminal-output"></div>
+
+            <form method="POST" class="mt-3 d-flex align-items-center" id="commandForm" @keydown.enter.prevent="ejecutarComando">
+                <!-- Prompt -->
+                <span x-text="$store.app.directorioTerminal + ' %'" class="text-bold prompt me-2"></span>
+                <div class="autocomplete-wrapper position-relative flex-grow-1">
+                    <!-- sugerencia comando-->
+                    <div class="ghost-text position-absolute">
+                        <span x-text="commandInput"></span><span style="opacity:0.4;" x-text="comandoSugerido.slice(commandInput.length)"></span>
+                    </div>
+                    <!-- Real input -->
+                    <input 
+                            x-show="!comandoEnEjecucion"
+                            :disabled="comandoEnEjecucion"
+                            type="text" id="commandInput" name="commandInput"
+                            x-model="commandInput"
+                            class="input-area position-relative bg-transparent"
+                            placeholder="Escribe un comando..."
+                            @input="sugerenciaComando"
+                            @keydown.arrow-right.prevent="autocompletarComando"
+                            autocomplete="off"
+                    >
+                    <i class="fa fa-spinner fa-spin mx-2" x-show="comandoEnEjecucion"></i>
+                </div>
+            </form>
+        </div>
+       <div class="d-flex justify-content-center align-items-center  p-3 mt-4">
+            <div class="message-box bg-dark p-3 rounded shadow-lg">
+                <ul class="list-unstyled mb-0">
+                    <li><i class="fas fa-info-circle"></i> Si la sugerencia de comando es correcta, presiona la tecla de flecha derecha <strong>-></strong> para autocompletar el comando.</li>
+                </ul>
+            </div>
+        </div>
+        <p x-data="{ year: new Date().getFullYear() }" class="text-center  mt-3 small">
+            &copy; <span x-text="year"></span> tcljohant. Todos los derechos reservados.
+        </p>
+    </div>
+    
+    <div class="loginContainer" 
+        :class="{'d-none': $store.auth.estaAutorizado}" 
+        x-data="LoginComponent"
+        x-cloak>
+        <h2 class="text-center">Bienvenido de nuevo</h2>
+    
+        <h1 class="text-center"></h1>
+        <form method="POST" class="mt-6 " @submit.prevent="login">
+            <input type="text" x-model="loginForm.usuario" id="usuario" name="usuario" class="input-area my-4 text-white" placeholder="usuario ..." autofocus required>
+            <input type="password" x-model="loginForm.password" id="password" name="password" class="input-area my-4 text-white" placeholder="contrasena ..." autofocus required>
+              <button type="submit" class="input-area">Iniciar sesion</button>
+        </form>
+    </div>
+
+</main>
+<script type="module" src="main.js"></script>
+</body>
+</html>
