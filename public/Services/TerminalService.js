@@ -63,7 +63,7 @@ class TerminalService {
       });
 
       let data = await response.json();
-      console.log(data);
+      //console.log(data);
       if (data?.data?.directorioTerminal) {
         Alpine.store("app").setDirectorioTerminal(data.data.directorioTerminal);
       }

@@ -126,16 +126,7 @@ class TerminalController
             //EJECUCION DE COMANDOS ASINCRONOS
             if (!in_array($command, $comandosSincronos)) {
                 //AGREGAR ANSI POR DEFECTO
-                $comandoBase = explode(' ', trim($command))[0];
-                $comandosConAnsi = ['./composer.sh','composer', 'npm', 'yarn', 'php'];
-
-                if (
-                    in_array($comandoBase, $comandosConAnsi) &&
-                    !str_contains($command, '--ansi') &&
-                    !str_contains($command, '--no-ansi')
-                ) {
-                    $command .= ' --ansi';
-                }
+                $command = $this->comandToAnsi($command);
 
                 $id = session_id();
                 $outputFile = __DIR__ . "/../temp/output_$id.txt";
@@ -250,4 +241,26 @@ class TerminalController
             "exitCode" => $exitCode
         ]);
     }
+
+    protected function comandToAnsi(string $command): string {
+        $command = trim($command);
+        $comandoBase = explode(' ', $command)[0];
+
+        // Si no tiene ni --no-ansi ni --ansi y es composer, agregar --ansi
+        if (!str_contains($command, '--no-ansi')
+            && !str_contains($command, '--ansi')
+            && ($comandoBase === 'composer' || $comandoBase === './composer.sh')) {
+            $command .= ' --ansi';
+        }
+
+        // Para git, agregar opción color
+        if ($comandoBase === 'git') {
+            // quitamos 'git' y cualquier espacio después
+            $restoComando = trim(substr($command, 3));
+            $command = $comandoBase . ' -c color.ui=always ' . $restoComando;
+        }
+
+        return $command;
+    }
+
 }

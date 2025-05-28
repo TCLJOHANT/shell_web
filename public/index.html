@@ -47,6 +47,7 @@
                     <!-- Real input -->
                     <input 
                             x-show="!comandoEnEjecucion"
+                            x-ref="inputComando"
                             :disabled="comandoEnEjecucion"
                             type="text" id="commandInput" name="commandInput"
                             x-model="commandInput"

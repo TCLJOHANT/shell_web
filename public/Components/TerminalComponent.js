@@ -71,12 +71,14 @@ const TerminalComponent = () => {
         this.$nextTick(() => {
           const el = this.$refs.terminalDom;
           el.scrollTop = el.scrollHeight;
+          this.commandInput = "";
+          this.indice_de_lectura = 0; // Reiniciar el indice_de_lectura
+          this.comandoEnEjecucion = false;
+          this.comandoSugerido = ""; // Limpiar el comando sugerido
+          setTimeout(() => {
+            this.$refs.inputComando.focus();
+          }, 50);
         });
-
-        this.commandInput = "";
-        this.indice_de_lectura = 0; // Reiniciar el indice_de_lectura
-        this.comandoEnEjecucion = false;
-        this.comandoSugerido = ""; // Limpiar el comando sugerido
         return;
       }
       //INICIO LONG POLLING
@@ -111,6 +113,9 @@ const TerminalComponent = () => {
             this.comandoEnEjecucion = false;
             // this.terminalOutput += "\n";
             this.terminalHtmlOutput += "<br>";
+            setTimeout(() => {
+              this.$refs.inputComando.focus();
+            }, 50);
             return;
           }
           hacerLongPolling();
